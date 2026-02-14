@@ -670,6 +670,11 @@ h3 { font-size: 1rem; margin-bottom: 12px; color: var(--text-dim); }
   .flex-between { flex-wrap: wrap; gap: 10px; }
   .table-wrap { font-size: .8rem; }
   .table-wrap th, .table-wrap td { padding: 8px 6px; }
+  .table-wrap table { table-layout: fixed; }
+  .table-wrap th:first-child, .table-wrap td:first-child { width: 45% !important; }
+  .table-wrap th:nth-child(2), .table-wrap td:nth-child(2) { width: 45%; }
+  .table-wrap th:last-child, .table-wrap td:last-child { width: 10%; }
+  .cat-select { width: 100% !important; box-sizing: border-box; }
   .edit-modal .modal-inner { width: 95%; max-height: 90vh; padding: 20px; }
   .edit-fields input, .edit-fields select, .edit-fields textarea { font-size: .85rem; }
   .interaction-add { flex-wrap: wrap; }
