@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+
+# Environment variables
+.env
+secrets.json
+
+# SQLite database (local dev only — production uses PostgreSQL)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Preview/temp files
+font-preview.html
+test_write.txt

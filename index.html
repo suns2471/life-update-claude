@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Life Update</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F9F6F1;
+  --surface:   #FFFFFF;
+  --surface-2: #F0ECE4;
+  --border:    #a899fd;
+  --text:      #3D3832;
+  --text-dim:  #8A8279;
+  --accent:    #a899fd;
+  --accent-hover: #836dff;
+  --accent-light: rgba(147,129,255,.10);
+  --success:   #4CAF7D;
+  --warning:   #D4952A;
+  --danger:    #C9453E;
+  --radius:    12px;
+  --shadow:    0 2px 16px rgba(61,56,50,.08);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px 0;
+}
+.app-header h1 { font-size: 1.6rem; font-weight: 700; }
+.app-header span { font-size: 1.4rem; }
+
+/* ── Tabs ───────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  padding: 16px 32px 0;
+  border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: .9rem;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-content { display: none; padding: 28px 32px; }
+.tab-content.active { display: block; }
+
+/* ── Cards ──────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(61,56,50,.05);
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+button, .btn {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  transition: all .15s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 22px;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 10px 22px;
+}
+.btn-outline:hover { background: var(--accent); color: #fff; }
+.btn-sm { padding: 6px 14px; font-size: .8rem; }
+
+/* ── Inputs ─────────────────────────────────────────────────────── */
+input[type="text"], input[type="email"], input[type="password"], input[type="date"], select, textarea {
+  width: 100%;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: .9rem;
+  transition: border-color .2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+textarea { resize: vertical; min-height: 80px; }
+
+/* ── Date picker styling ───────────────────────────────────────── */
+.date-picker-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 6px 18px;
+  height: 40px;
+}
+.date-picker-wrap input[type="date"] {
+  width: auto;
+  min-width: 150px;
+  border: none;
+  background: transparent;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--accent-hover);
+  cursor: pointer;
+  padding: 0;
+  accent-color: var(--accent-hover);
+  color-scheme: light;
+}
+.date-picker-wrap input[type="date"]:focus {
+  outline: none;
+}
+.date-picker-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: hue-rotate(260deg) saturate(1.5) brightness(.85);
+  cursor: pointer;
+}
+/* Modern Chrome (120+): style the calendar popup itself */
+.date-picker-wrap input[type="date"]::picker(date-picker) {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(61,56,50,.12);
+  color: var(--text);
+  accent-color: var(--accent-hover);
+}
+.days-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 6px 18px;
+  height: 40px;
+}
+.days-pill span {
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--accent-hover);
+  white-space: nowrap;
+}
+.days-pill input[type="number"] {
+  width: 52px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 4px 2px;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--accent-hover);
+  -moz-appearance: textfield;
+}
+.days-pill input[type="number"]::-webkit-inner-spin-button,
+.days-pill input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.days-pill input[type="number"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+label {
+  display: block;
+  font-size: .8rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.form-group { margin-bottom: 16px; }
+
+/* ── File upload ────────────────────────────────────────────────── */
+.file-upload {
+  position: relative;
+  display: inline-block;
+}
+.file-upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ── Table ──────────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin-top: 12px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .85rem;
+}
+th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+tr:hover td { background: var(--surface-2); }
+
+/* ── Grid helpers ───────────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3-1 { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+
+/* ── Alerts ─────────────────────────────────────────────────────── */
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: .85rem;
+  margin-bottom: 16px;
+  display: none;
+}
+.alert.show { display: block; animation: fadeIn .3s; }
+.alert-success { background: rgba(76,175,125,.10); color: var(--success); border: 1px solid rgba(76,175,125,.25); }
+.alert-warning { background: rgba(212,149,42,.10); color: var(--warning); border: 1px solid rgba(212,149,42,.25); }
+.alert-error   { background: rgba(201,69,62,.10);  color: var(--danger);  border: 1px solid rgba(201,69,62,.25); }
+.alert-info    { background: rgba(147,129,255,.10); color: var(--accent);  border: 1px solid rgba(147,129,255,.25); }
+
+/* ── Spinner ────────────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Summary markdown ───────────────────────────────────────────── */
+.summary-box {
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 12px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.summary-box h1, .summary-box h2, .summary-box h3 { margin: 12px 0 6px; }
+.summary-box ul, .summary-box ol { padding-left: 20px; }
+
+/* ── Random contact highlight ───────────────────────────────────── */
+.highlight-card {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 12px;
+  animation: fadeIn .3s;
+}
+.highlight-card .name { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+.highlight-card .details { margin-top: 8px; font-size: .85rem; color: var(--text-dim); }
+.highlight-card .details span { display: inline-block; margin-right: 16px; }
+
+/* ── Caption ────────────────────────────────────────────────────── */
+.caption { font-size: .8rem; color: var(--text-dim); margin-bottom: 8px; }
+
+/* ── Section header ─────────────────────────────────────────────── */
+h2 { font-size: 1.25rem; margin-bottom: 16px; }
+h3 { font-size: 1rem; margin-bottom: 12px; color: var(--text-dim); }
+
+/* ── Connection banner ──────────────────────────────────────────── */
+.conn-banner {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 32px 0;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.conn-banner.show { display: flex; }
+.conn-banner.error {
+  background: rgba(201,69,62,.08);
+  border: 1px solid rgba(201,69,62,.20);
+  color: var(--danger);
+}
+.conn-banner.ok {
+  background: rgba(76,175,125,.08);
+  border: 1px solid rgba(76,175,125,.18);
+  color: var(--success);
+}
+.conn-banner code {
+  background: rgba(61,56,50,.06);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: .82rem;
+}
+.conn-banner .dismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0 4px;
+  opacity: .6;
+}
+.conn-banner .dismiss:hover { opacity: 1; }
+
+/* ── Login Screen ───────────────────────────────────────────────── */
+.login-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.login-screen.hidden { display: none; }
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 48px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.login-card .logo { font-size: 2.5rem; margin-bottom: -25px; }
+.login-card h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+.login-card .subtitle {
+  color: var(--text-dim);
+  margin-bottom: 28px;
+  font-size: .95rem;
+}
+.login-card .form-group { text-align: left; }
+
+/* ── User bar in header ─────────────────────────────────────────── */
+.user-bar {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: .9rem;
+  color: var(--text-dim);
+}
+
+/* ── Contact picker modal ──────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(61,56,50,.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn .2s;
+}
+.modal-overlay.hidden { display: none; }
+
+.modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(61,56,50,.15);
+}
+.modal-card h2 { margin-bottom: 4px; }
+.modal-card .subtitle {
+  color: var(--text-dim);
+  font-size: .85rem;
+  margin-bottom: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.modal-actions .count {
+  margin-left: auto;
+  font-size: .82rem;
+  color: var(--text-dim);
+}
+
+.contact-list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .15s;
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-row:hover { background: var(--surface-2); }
+.contact-row.selected { background: var(--accent-light); }
+.contact-row input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.contact-row .contact-name {
+  font-weight: 600;
+  font-size: .9rem;
+}
+.contact-row .contact-detail {
+  font-size: .78rem;
+  color: var(--text-dim);
+}
+.contact-row.is-duplicate { opacity: .6; }
+.contact-row.is-duplicate.selected { opacity: 1; }
+.dupe-tag {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 500;
+  color: var(--warning);
+  background: rgba(212,149,42,.10);
+  border: 1px solid rgba(212,149,42,.25);
+  padding: 1px 8px;
+  border-radius: 12px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* ── Delete contact button ─────────────────────────────────────── */
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: .95rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all .15s;
+}
+.delete-btn:hover {
+  color: var(--danger);
+  background: rgba(201,69,62,.08);
+}
+
+/* ── Edit contact modal ────────────────────────────────────────── */
+.edit-modal .modal-card {
+  max-width: 520px;
+}
+.edit-fields {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 55vh;
+  padding-right: 4px;
+}
+.edit-fields .field-group {
+  margin-bottom: 14px;
+}
+.edit-fields .field-group label {
+  display: block;
+  font-size: .78rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.edit-fields .field-group input {
+  width: 100%;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: .88rem;
+}
+.edit-fields .field-group input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+.edit-fields .field-group input::placeholder {
+  color: var(--text-dim);
+  opacity: .5;
+}
+.edit-fields .field-group.name-field input {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.edit-fields .field-separator {
+  border: none;
+  border-top: 1px solid var(--surface-2);
+  margin: 16px 0;
+}
+.clickable-name {
+  cursor: pointer;
+  color: var(--accent);
+  text-decoration: none;
+}
+.clickable-name:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* ── Interaction log ───────────────────────────────────────────── */
+.interaction-section h3 {
+  font-size: .9rem;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.interaction-add {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  align-items: flex-end;
+}
+.interaction-add .date-col {
+  flex: 0 0 auto;
+}
+.interaction-add .date-col label,
+.interaction-add .note-col label {
+  font-size: .72rem;
+  color: var(--text-dim);
+  margin-bottom: 3px;
+}
+.interaction-add .note-col {
+  flex: 1;
+}
+.interaction-add input:not(.date-picker-wrap input) {
+  width: 100%;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: .84rem;
+}
+.interaction-add input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.interaction-add button {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  font-size: .8rem;
+}
+.interaction-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--surface-2);
+  border-radius: 8px;
+}
+.interaction-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--surface-2);
+  font-size: .84rem;
+}
+.interaction-item:last-child { border-bottom: none; }
+.interaction-item .int-date {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: .8rem;
+  min-width: 90px;
+}
+.interaction-item .int-note {
+  flex: 1;
+  color: var(--text);
+  line-height: 1.4;
+}
+.interaction-item .int-delete {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: .78rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.interaction-item:hover .int-delete { opacity: 1; }
+.interaction-item .int-delete:hover { color: var(--danger); }
+.interaction-empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: .82rem;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .grid-2, .grid-3-1 { grid-template-columns: 1fr; }
+  .tab-bar { overflow-x: auto; padding: 12px 16px 0; }
+  .tab-btn { padding: 8px 14px; font-size: .82rem; white-space: nowrap; }
+  .tab-content { padding: 20px 16px; }
+  .app-header { padding: 16px 16px 0; }
+  .app-header h1 { font-size: 1.2rem !important; }
+  .app-header h1 svg { width: 48px !important; height: 48px !important; }
+  .conn-banner { margin: 12px 16px 0; }
+  .flex-between { flex-wrap: wrap; gap: 10px; }
+  .table-wrap { font-size: .8rem; }
+  .table-wrap th, .table-wrap td { padding: 8px 6px; }
+  .edit-modal .modal-inner { width: 95%; max-height: 90vh; padding: 20px; }
+  .edit-fields input, .edit-fields select, .edit-fields textarea { font-size: .85rem; }
+  .interaction-add { flex-wrap: wrap; }
+  .interaction-add .date-col { flex: 0 0 auto; }
+  .interaction-add .note-col { flex: 1 1 200px; }
+}
+@media (max-width: 480px) {
+  .login-card { padding: 32px 20px; max-width: 100%; margin: 0 16px; }
+  .login-card .logo svg { width: 96px !important; height: 96px !important; }
+  .login-card h1 { font-size: 1.5rem; }
+  .app-header h1 { font-size: 1rem !important; }
+  .app-header h1 svg { width: 36px !important; height: 36px !important; }
+  .tab-btn { padding: 6px 10px; font-size: .75rem; }
+  .table-wrap { font-size: .72rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-wrap th, .table-wrap td { padding: 6px 4px; }
+  .cat-select { font-size: .72rem !important; padding: 3px 4px !important; }
+  .btn-sm { padding: 5px 10px; font-size: .72rem; }
+  .card { padding: 16px; }
+  .highlight-card { padding: 14px; }
+  .highlight-card .details { font-size: .82rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ─────────────────────────────────────────────── -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="128" height="128"><line x1="60" y1="38" x2="32" y2="68" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="60" y1="38" x2="88" y2="68" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="32" y1="68" x2="88" y2="68" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="32" y1="68" x2="46" y2="96" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="88" y1="68" x2="74" y2="96" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="46" y1="96" x2="74" y2="96" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><circle cx="60" cy="30" r="8" fill="none" stroke="#2c2c2c" stroke-width="2.5"/><circle cx="60" cy="26" r="3.5" fill="#2c2c2c"/><path d="M52 38 Q60 44 68 38" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="32" cy="60" r="7" fill="none" stroke="#2c2c2c" stroke-width="2.2"/><circle cx="32" cy="56.5" r="3" fill="#2c2c2c"/><path d="M25.5 67 Q32 72 38.5 67" stroke="#2c2c2c" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="88" cy="60" r="7" fill="none" stroke="#2c2c2c" stroke-width="2.2"/><circle cx="88" cy="56.5" r="3" fill="#2c2c2c"/><path d="M81.5 67 Q88 72 94.5 67" stroke="#2c2c2c" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="46" cy="88" r="6.5" fill="none" stroke="#2c2c2c" stroke-width="2"/><circle cx="46" cy="84.8" r="2.8" fill="#2c2c2c"/><path d="M40 94 Q46 98.5 52 94" stroke="#2c2c2c" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="74" cy="88" r="6.5" fill="none" stroke="#2c2c2c" stroke-width="2"/><circle cx="74" cy="84.8" r="2.8" fill="#2c2c2c"/><path d="M68 94 Q74 98.5 80 94" stroke="#2c2c2c" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+    <h1 style="font-family:'Pacifico',cursive;">LifeUpdate</h1>
+    <p class="subtitle" id="login-subtitle">Sign in to your account.</p>
+
+    <!-- Login form -->
+    <form id="login-form">
+      <div class="form-group">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="Your password" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 4px;">Sign In</button>
+    </form>
+
+    <!-- Register form (hidden by default) -->
+    <form id="register-form" style="display:none;">
+      <div class="form-group">
+        <label for="reg-name">Name</label>
+        <input type="text" id="reg-name" placeholder="Your name" required autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label for="reg-email">Email</label>
+        <input type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" placeholder="Choose a password" required autocomplete="new-password" />
+      </div>
+      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 4px;">Create Account</button>
+    </form>
+
+    <div id="login-alert" class="alert" style="margin-top: 16px;"></div>
+    <p style="text-align:center;margin-top:14px;font-size:.85rem;color:var(--text-dim);">
+      <span id="toggle-auth-text">Don't have an account?</span>
+      <a href="#" id="toggle-auth-link" style="color:var(--accent);font-weight:500;">Sign up</a>
+    </p>
+  </div>
+</div>
+
+<!-- ── MAIN APP (hidden until logged in) ────────────────────────── -->
+<div id="main-app" style="display: none;">
+
+<!-- ── Header ────────────────────────────────────────────────────── -->
+<div class="app-header">
+  <h1 style="display:flex;align-items:center;gap:0;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="72" height="72"><line x1="60" y1="38" x2="32" y2="68" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="60" y1="38" x2="88" y2="68" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="32" y1="68" x2="88" y2="68" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="32" y1="68" x2="46" y2="96" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="88" y1="68" x2="74" y2="96" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><line x1="46" y1="96" x2="74" y2="96" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/><circle cx="60" cy="30" r="8" fill="none" stroke="#2c2c2c" stroke-width="2.5"/><circle cx="60" cy="26" r="3.5" fill="#2c2c2c"/><path d="M52 38 Q60 44 68 38" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="32" cy="60" r="7" fill="none" stroke="#2c2c2c" stroke-width="2.2"/><circle cx="32" cy="56.5" r="3" fill="#2c2c2c"/><path d="M25.5 67 Q32 72 38.5 67" stroke="#2c2c2c" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="88" cy="60" r="7" fill="none" stroke="#2c2c2c" stroke-width="2.2"/><circle cx="88" cy="56.5" r="3" fill="#2c2c2c"/><path d="M81.5 67 Q88 72 94.5 67" stroke="#2c2c2c" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="46" cy="88" r="6.5" fill="none" stroke="#2c2c2c" stroke-width="2"/><circle cx="46" cy="84.8" r="2.8" fill="#2c2c2c"/><path d="M40 94 Q46 98.5 52 94" stroke="#2c2c2c" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="74" cy="88" r="6.5" fill="none" stroke="#2c2c2c" stroke-width="2"/><circle cx="74" cy="84.8" r="2.8" fill="#2c2c2c"/><path d="M68 94 Q74 98.5 80 94" stroke="#2c2c2c" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span style="font-family:'Pacifico',cursive;font-size:2.2rem;margin-left:0;">LifeUpdate</span></h1>
+  <div class="user-bar">
+    <span id="current-user"></span>
+    <button id="logout-btn" class="btn-outline btn-sm">Logout</button>
+  </div>
+</div>
+
+<!-- ── Connection Banner ──────────────────────────────────────────── -->
+<div id="conn-banner" class="conn-banner"></div>
+
+<!-- ── Tab Bar ────────────────────────────────────────────────────── -->
+<nav class="tab-bar">
+  <button class="tab-btn active" data-tab="rolodex">Connect Me</button>
+  <button class="tab-btn" data-tab="refresher">Remind Me</button>
+  <button class="tab-btn" data-tab="life-journal">Daily Journal</button>
+  <button class="tab-btn" data-tab="work-journal">Work Log</button>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- TAB 1: THE ROLODEX                                              -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div id="rolodex" class="tab-content active">
+  <div class="flex-between" style="margin-bottom: 20px;">
+    <h2>My People</h2>
+    <div style="display: flex; gap: 8px; align-items: stretch;">
+      <button id="add-contact-btn" class="btn-outline btn-sm" style="box-sizing:border-box;">+ Add Contact</button>
+      <div class="file-upload" style="display:flex;">
+        <button class="btn-primary btn-sm" style="box-sizing:border-box;">Import Contacts (vCard)</button>
+        <input type="file" id="vcf-upload" accept=".vcf" />
+      </div>
+    </div>
+  </div>
+
+  <div id="contacts-alert" class="alert"></div>
+
+  <div class="grid-3-1">
+    <!-- Left: Table -->
+    <div class="card">
+      <div class="flex-between" style="margin-bottom: 12px;">
+        <div>
+          <label for="category-filter">Filter by category</label>
+          <select id="category-filter" style="width: 220px;">
+            <option value="All Contacts">All Contacts</option>
+            <option value="Close Friends">Close Friends</option>
+            <option value="Recent Connections">Recent Connections</option>
+            <option value="Professional Network">Professional Network</option>
+          </select>
+        </div>
+        <span id="contact-count" style="font-size:.95rem;font-weight:600;color:var(--text);"></span>
+        <button id="clear-all-btn" class="btn-sm" style="background:none;color:var(--danger);border:1px solid var(--danger);border-radius:20px;font-size:.78rem;padding:5px 14px;font-weight:500;">Clear All Contacts</button>
+      </div>
+      <div class="table-wrap" style="max-height: 480px; overflow-y: auto;">
+        <table>
+          <thead id="contacts-thead"></thead>
+          <tbody id="contacts-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right: Actions -->
+    <div>
+      <div class="card">
+        <h3>Actions</h3>
+        <button id="random-btn" class="btn-primary" style="width: 100%;">🎲 Pick someone to call!</button>
+        <div id="random-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- TAB 2: CONNECT ME                                            -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div id="refresher" class="tab-content">
+  <h2>What's Happened Recently?</h2>
+
+  <div style="display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap; margin-bottom: 8px;">
+    <div class="form-group" style="margin-bottom: 0;">
+      <label for="timeframe-days">Look-back Period</label>
+      <div class="days-pill">
+        <span>Last</span>
+        <input type="number" id="timeframe-days" value="7" min="1" max="365" />
+        <span>days</span>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom: 0;">
+      <label for="timeframe-date">Look-back Date</label>
+      <div class="date-picker-wrap" style="height: 40px;">
+        <input type="date" id="timeframe-date" />
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Life Update -->
+    <div class="card">
+      <h3>Life Update</h3>
+      <button id="life-summary-btn" class="btn-primary">Generate Life Summary</button>
+      <div id="life-summary-alert" class="alert" style="margin-top: 12px;"></div>
+      <div id="life-summary-result"></div>
+    </div>
+
+    <!-- Work Update -->
+    <div class="card">
+      <h3>Work Update</h3>
+      <button id="work-summary-btn" class="btn-primary">Generate Work Summary</button>
+      <div id="work-summary-alert" class="alert" style="margin-top: 12px;"></div>
+      <div id="work-summary-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- TAB 3: DAILY JOURNAL                                             -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div id="life-journal" class="tab-content">
+  <h2>Daily Journal</h2>
+  <div class="card">
+    <div class="form-group">
+      <label for="life-date">Date</label>
+      <div class="date-picker-wrap">
+        <input type="date" id="life-date" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>1.</label>
+      <textarea id="life-entry-1" placeholder="What was your favorite moment of the day?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>2.</label>
+      <textarea id="life-entry-2" placeholder="Did you... Try any new restaurants? Read a book? Accomplish a mini-goal?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>3.</label>
+      <textarea id="life-entry-3" placeholder="What was challenging or difficult? What made you feel down?"></textarea>
+    </div>
+    <div id="life-save-alert" class="alert"></div>
+    <button id="life-save-btn" class="btn-primary">Save Entry</button>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- TAB 4: WORK LOG                                             -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div id="work-journal" class="tab-content">
+  <h2>Work Log</h2>
+  <div class="card">
+    <div class="form-group">
+      <label for="work-date">Date</label>
+      <div class="date-picker-wrap">
+        <input type="date" id="work-date" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>1.</label>
+      <textarea id="work-entry-1" placeholder="What are the current areas you're focused on at work?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>2.</label>
+      <textarea id="work-entry-2" placeholder="What did you cross off your to-do list today?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>3.</label>
+      <textarea id="work-entry-3" placeholder="What's coming up? Or on your mind?"></textarea>
+    </div>
+    <div id="work-save-alert" class="alert"></div>
+    <button id="work-save-btn" class="btn-primary">Save Entry</button>
+  </div>
+
+</div>
+
+<!-- ── Contact Picker Modal ────────────────────────────────────── -->
+<div id="vcf-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <h2>Select Contacts to Import</h2>
+    <p class="subtitle">Choose which contacts you'd like to add to your list.</p>
+    <div class="modal-actions">
+      <button id="vcf-select-all" class="btn-outline btn-sm">Select All</button>
+      <button id="vcf-deselect-all" class="btn-outline btn-sm">Deselect All</button>
+      <span class="count"><span id="vcf-selected-count">0</span> of <span id="vcf-total-count">0</span> selected</span>
+    </div>
+    <div id="vcf-contact-list" class="contact-list"></div>
+    <div class="modal-footer">
+      <button id="vcf-cancel" class="btn-outline">Cancel</button>
+      <button id="vcf-import" class="btn-primary">Import Selected</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Contact Edit Modal ──────────────────────────────────────── -->
+<div id="edit-modal" class="modal-overlay edit-modal hidden">
+  <div class="modal-card">
+    <h2 id="edit-modal-title">Edit Contact</h2>
+    <p class="subtitle"></p>
+    <div id="edit-fields" class="edit-fields"></div>
+    <div id="edit-modal-alert" class="alert" style="margin-top: 8px;"></div>
+    <div class="modal-footer" style="margin-top: 12px;">
+      <button id="edit-cancel" class="btn-outline">Cancel</button>
+      <button id="edit-save" class="btn-primary">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main-app -->
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT                                                      -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<script>
+// ── API base URL ────────────────────────────────────────────────
+const API = window.location.protocol === "file:"
+  ? "http://localhost:5001"
+  : "";
+
+// ── Utility ─────────────────────────────────────────────────────
+function $(sel) { return document.querySelector(sel); }
+function $$(sel) { return document.querySelectorAll(sel); }
+
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type} show`;
+  el.textContent = msg;
+  if (type === "success") setTimeout(() => el.classList.remove("show"), 4000);
+}
+function hideAlert(id) { document.getElementById(id).classList.remove("show"); }
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function escapeHtml(str) {
+  if (str == null) return "";
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function friendlyError(err) {
+  if (err instanceof TypeError && /fetch/i.test(err.message)) {
+    return "Can't reach the server. Make sure it's running (see banner above).";
+  }
+  return err.message || String(err);
+}
+
+function renderTable(theadId, tbodyId, records) {
+  const thead = document.getElementById(theadId);
+  const tbody = document.getElementById(tbodyId);
+  if (!records || records.length === 0) {
+    thead.innerHTML = "";
+    tbody.innerHTML = '<tr><td style="color:var(--text-dim)">No data yet.</td></tr>';
+    return;
+  }
+  const cols = Object.keys(records[0]);
+  thead.innerHTML = "<tr>" + cols.map(c => `<th>${escapeHtml(c)}</th>`).join("") + "</tr>";
+  tbody.innerHTML = records.map(r =>
+    "<tr>" + cols.map(c => `<td>${escapeHtml(r[c])}</td>`).join("") + "</tr>"
+  ).join("");
+}
+
+// ── Authentication ──────────────────────────────────────────────
+let currentUser = null;
+
+function showLoginScreen() {
+  $("#login-screen").classList.remove("hidden");
+  $("#main-app").style.display = "none";
+}
+
+function showMainApp() {
+  $("#login-screen").classList.add("hidden");
+  $("#main-app").style.display = "block";
+  $("#current-user").textContent = `Hello, ${escapeHtml(currentUser.name)}`;
+}
+
+async function loadAppData() {
+  await checkConnection();
+  if (serverOnline) {
+    loadContacts();
+    setupJournal("life");
+    setupJournal("work");
+  }
+}
+
+async function checkAuth() {
+  try {
+    const res = await fetch(`${API}/api/me`, { credentials: "include" });
+    const data = await res.json();
+    if (res.ok && data.user) {
+      currentUser = data.user;
+      showMainApp();
+      await loadAppData();
+      return true;
+    }
+  } catch (e) { /* not logged in */ }
+  showLoginScreen();
+  return false;
+}
+
+async function handleLogin(email, password) {
+  hideAlert("login-alert");
+  try {
+    const res = await fetch(`${API}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.user) {
+      showAlert("login-alert", "error", data.error || "Login failed");
+      return;
+    }
+    currentUser = data.user;
+    showMainApp();
+    await loadAppData();
+  } catch (e) {
+    showAlert("login-alert", "error", friendlyError(e));
+  }
+}
+
+async function handleRegister(name, email, password) {
+  hideAlert("login-alert");
+  try {
+    const res = await fetch(`${API}/api/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ name, email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.user) {
+      showAlert("login-alert", "error", data.error || "Registration failed");
+      return;
+    }
+    currentUser = data.user;
+    showMainApp();
+    await loadAppData();
+  } catch (e) {
+    showAlert("login-alert", "error", friendlyError(e));
+  }
+}
+
+async function handleLogout() {
+  try {
+    await fetch(`${API}/api/logout`, { method: "POST", credentials: "include" });
+  } catch (e) { /* ignore */ }
+  currentUser = null;
+  allContacts = [];
+  showLoginScreen();
+  $("#login-email").value = "";
+  $("#login-password").value = "";
+  $("#login-email").focus();
+}
+
+// Toggle between login and register forms
+let isLoginMode = true;
+$("#toggle-auth-link").addEventListener("click", (e) => {
+  e.preventDefault();
+  hideAlert("login-alert");
+  isLoginMode = !isLoginMode;
+  $("#login-form").style.display = isLoginMode ? "" : "none";
+  $("#register-form").style.display = isLoginMode ? "none" : "";
+  $("#login-subtitle").textContent = isLoginMode ? "Sign in to your account." : "Create a new account.";
+  $("#toggle-auth-text").textContent = isLoginMode ? "Don't have an account?" : "Already have an account?";
+  $("#toggle-auth-link").textContent = isLoginMode ? "Sign up" : "Sign in";
+});
+
+// Login form
+$("#login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = $("#login-email").value.trim();
+  const password = $("#login-password").value;
+  if (!email || !password) { showAlert("login-alert", "error", "All fields are required"); return; }
+  await handleLogin(email, password);
+});
+
+// Register form
+$("#register-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = $("#reg-name").value.trim();
+  const email = $("#reg-email").value.trim();
+  const password = $("#reg-password").value;
+  if (!name || !email || !password) { showAlert("login-alert", "error", "All fields are required"); return; }
+  await handleRegister(name, email, password);
+});
+
+// Logout button
+$("#logout-btn").addEventListener("click", handleLogout);
+
+// ── Connection check ────────────────────────────────────────────
+let serverOnline = false;
+
+async function checkConnection() {
+  const banner = $("#conn-banner");
+  try {
+    const res = await fetch(`${API}/api/health`, { signal: AbortSignal.timeout(3000) });
+    const data = await res.json();
+    if (data.status === "ok") {
+      serverOnline = true;
+      banner.className = "conn-banner ok show";
+      banner.innerHTML = `Connected to server <button class="dismiss" onclick="this.parentElement.classList.remove('show')">&times;</button>`;
+      setTimeout(() => banner.classList.remove("show"), 3000);
+      return true;
+    }
+  } catch (e) { /* fall through */ }
+
+  serverOnline = false;
+  const isFile = window.location.protocol === "file:";
+  banner.className = "conn-banner error show";
+  banner.innerHTML = isFile
+    ? `<div>
+        <strong>Server not reachable.</strong> You opened this file directly in your browser.
+        Instead, start the server first and open it there:<br>
+        <code>python server.py</code> &rarr; then visit <code>http://localhost:5001</code>
+      </div>`
+    : `<div>
+        <strong>Server not reachable.</strong> Make sure the Flask server is running:<br>
+        <code>pip install -r requirements.txt</code><br>
+        <code>python server.py</code>
+      </div>`;
+  return false;
+}
+
+// ── Tabs ────────────────────────────────────────────────────────
+$$(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    $$(".tab-btn").forEach(b => b.classList.remove("active"));
+    $$(".tab-content").forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+  });
+});
+
+// ── TAB 1: Contacts ─────────────────────────────────────────────
+let allContacts = [];
+const FIXED_CATEGORIES = ["Close Friends", "Recent Connections", "Professional Network"];
+
+async function loadContacts() {
+  try {
+    const res = await fetch(`${API}/api/contacts`, { credentials: "include" });
+    const data = await res.json();
+    allContacts = data.contacts || [];
+
+    // Ensure every contact has a "Phone" field, picking the best available
+    const phonePriority = ["Phone", "Phone (Cell)", "Phone (Home)", "Phone (Work)", "Phone (Other)"];
+    allContacts.forEach(c => {
+      if (!c.Phone || !c.Phone.trim()) {
+        for (const key of phonePriority.slice(1)) {
+          if (c[key] && c[key].trim()) { c.Phone = c[key]; break; }
+        }
+      }
+    });
+
+    const cats = data.categories || [];
+
+    const sel = $("#category-filter");
+    sel.querySelectorAll(".dynamic-cat").forEach(o => o.remove());
+
+    cats.forEach(c => {
+      if (!FIXED_CATEGORIES.includes(c)) {
+        const opt = document.createElement("option");
+        opt.value = c; opt.textContent = c;
+        opt.className = "dynamic-cat";
+        sel.appendChild(opt);
+      }
+    });
+
+    filterContacts();
+    if (data.error) showAlert("contacts-alert", "warning", data.error);
+  } catch (e) {
+    showAlert("contacts-alert", "error", friendlyError(e));
+  }
+}
+
+function filterContacts() {
+  const cat = $("#category-filter").value;
+  const filtered = cat === "All Contacts"
+    ? allContacts.map((c, i) => ({ ...c, _row: i }))
+    : allContacts.map((c, i) => ({ ...c, _row: i })).filter(c => c.Category === cat);
+  $("#contact-count").textContent = `${filtered.length} Contacts`;
+  renderContactsTable(filtered);
+}
+
+function renderContactsTable(records) {
+  const thead = document.getElementById("contacts-thead");
+  const tbody = document.getElementById("contacts-tbody");
+  if (!records || records.length === 0) {
+    thead.innerHTML = "";
+    tbody.innerHTML = '<tr><td style="color:var(--text-dim)">No contacts yet.</td></tr>';
+    return;
+  }
+  const cols = Object.keys(records[0]).filter(c => c !== "_row" && c !== "id");
+  thead.innerHTML = "<tr>" + cols.map(c => `<th${c === "Category" ? ' style="width:220px"' : ""}>${escapeHtml(c)}</th>`).join("") + "<th></th></tr>";
+
+  tbody.innerHTML = records.map(r => {
+    const cells = cols.map(col => {
+      if (col === "Category") {
+        const opts = FIXED_CATEGORIES.map(cat =>
+          `<option value="${escapeHtml(cat)}"${r.Category === cat ? " selected" : ""}>${escapeHtml(cat)}</option>`
+        ).join("");
+        const extra = !FIXED_CATEGORIES.includes(r.Category) && r.Category
+          ? `<option value="${escapeHtml(r.Category)}" selected>${escapeHtml(r.Category)}</option>`
+          : "";
+        return `<td><select class="cat-select" data-row="${r._row}" style="width:100%;padding:4px 8px;font-size:.82rem;">${extra}${opts}</select></td>`;
+      }
+      if (col === "Name") {
+        return `<td><a class="clickable-name" href="#" data-row="${r._row}">${escapeHtml(r[col])}</a></td>`;
+      }
+      return `<td>${escapeHtml(r[col])}</td>`;
+    }).join("");
+    return `<tr>${cells}<td><button class="delete-btn" data-row="${r._row}" title="Delete contact">&#x1f5d1;</button></td></tr>`;
+  }).join("");
+
+  // Wire up change events on all category dropdowns
+  tbody.querySelectorAll(".cat-select").forEach(sel => {
+    sel.addEventListener("change", async (e) => {
+      const row = parseInt(e.target.dataset.row);
+      const newCat = e.target.value;
+      const contactId = allContacts[row].id;   // use database id
+      e.target.disabled = true;
+      try {
+        const res = await fetch(`${API}/api/contacts/category`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ id: contactId, category: newCat }),
+        });
+        const data = await res.json();
+        if (data.error) { showAlert("contacts-alert", "error", data.error); return; }
+        allContacts[row].Category = newCat;
+        /* success alert removed */
+      } catch (err) {
+        showAlert("contacts-alert", "error", friendlyError(err));
+      } finally {
+        e.target.disabled = false;
+      }
+    });
+  });
+
+  // Wire up delete buttons
+  tbody.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const row = parseInt(e.currentTarget.dataset.row);
+      const contact = allContacts[row];
+      if (!confirm(`Delete "${contact.Name}"? This cannot be undone.`)) return;
+
+      e.currentTarget.disabled = true;
+      try {
+        const res = await fetch(`${API}/api/contacts/${contact.id}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (data.error) { showAlert("contacts-alert", "error", data.error); return; }
+        /* success alert removed */
+        loadContacts();  // refresh the table
+      } catch (err) {
+        showAlert("contacts-alert", "error", friendlyError(err));
+      }
+    });
+  });
+
+  // Wire up clickable names to open edit modal
+  tbody.querySelectorAll(".clickable-name").forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const row = parseInt(e.currentTarget.dataset.row);
+      openEditModal(row);
+    });
+  });
+}
+
+$("#category-filter").addEventListener("change", filterContacts);
+
+// Add new contact
+$("#add-contact-btn").addEventListener("click", () => openEditModal(null));
+
+// Clear all contacts
+$("#clear-all-btn").addEventListener("click", async () => {
+  if (!confirm("Delete ALL contacts? This cannot be undone.")) return;
+  try {
+    const res = await fetch(`${API}/api/contacts/clear`, { method: "POST", credentials: "include" });
+    const data = await res.json();
+    if (data.error) { showAlert("contacts-alert", "error", data.error); return; }
+    /* success alert removed */
+    loadContacts();
+  } catch (err) {
+    showAlert("contacts-alert", "error", friendlyError(err));
+  }
+});
+
+// ── Edit / Add Contact Modal ────────────────────────────────────
+let editContactId = null;
+let editMode = "edit"; // "edit" or "add"
+let pendingInteractions = []; // queued interactions for add mode
+
+// Fields that go in the top section (above the data fields separator)
+const TOP_FIELDS = new Set(["Name", "Category"]);
+const HIDDEN_FIELDS = new Set(["Address", "Email (Home)"]);
+
+// Collect the union of all extra field keys across every contact,
+// sorted in a logical order: Title, Company, Phones, Emails, Addresses, Notes, then rest.
+function getAllFieldKeys() {
+  const keys = new Set();
+  allContacts.forEach(c => {
+    Object.keys(c).forEach(k => {
+      if (k !== "id" && !TOP_FIELDS.has(k) && !HIDDEN_FIELDS.has(k)) keys.add(k);
+    });
+  });
+  // Ensure common data fields are always present
+  const coreFields = ["Title", "Company",
+    "Phone (Cell)", "Phone (Home)", "Phone (Work)",
+    "Email", "Email (Work)",
+    "Address (Home)", "Address (Work)", "Notes"];
+  coreFields.forEach(f => keys.add(f));
+
+  // Sort into logical groups
+  const groupOrder = (k) => {
+    if (k === "Title")          return 0;
+    if (k === "Company")        return 1;
+    if (k.startsWith("Phone"))  return 2;
+    if (k.startsWith("Email"))  return 3;
+    if (k.startsWith("Address"))return 4;
+    if (k === "Notes")          return 5;
+    if (k.startsWith("Website"))return 6;
+    return 7;
+  };
+  const sorted = Array.from(keys);
+  sorted.sort((a, b) => {
+    const ga = groupOrder(a);
+    const gb = groupOrder(b);
+    if (ga !== gb) return ga - gb;
+    return a.localeCompare(b);
+  });
+  return sorted;
+}
+
+function buildFieldHTML(key, value, options) {
+  const { isName, isCat } = options || {};
+  if (isCat) {
+    const opts = FIXED_CATEGORIES.map(cat =>
+      `<option value="${escapeHtml(cat)}"${value === cat ? " selected" : ""}>${escapeHtml(cat)}</option>`
+    ).join("");
+    const extra = value && !FIXED_CATEGORIES.includes(value)
+      ? `<option value="${escapeHtml(value)}" selected>${escapeHtml(value)}</option>`
+      : "";
+    return `<div class="field-group">
+      <label>Category</label>
+      <select data-field="Category" style="padding:9px 12px;font-size:.88rem;">${extra}${opts}</select>
+    </div>`;
+  }
+  return `<div class="field-group${isName ? " name-field" : ""}">
+    <label>${escapeHtml(key)}</label>
+    <input type="text" data-field="${escapeHtml(key)}" value="${escapeHtml(value)}" placeholder="${isName ? "Required" : "Empty"}" />
+  </div>`;
+}
+
+// Render the interaction log inside the modal
+async function loadInteractions(contactId) {
+  const listEl = $("#interaction-list");
+  try {
+    const res = await fetch(`${API}/api/contacts/${contactId}/interactions`, { credentials: "include" });
+    const data = await res.json();
+    const items = data.interactions || [];
+    if (items.length === 0) {
+      listEl.innerHTML = '<div class="interaction-empty">No recorded history!</div>';
+      return;
+    }
+    listEl.innerHTML = items.map(i => `
+      <div class="interaction-item">
+        <span class="int-date">${escapeHtml(i.date)}</span>
+        <span class="int-note">${escapeHtml(i.note)}</span>
+        <button class="int-delete" data-int-id="${i.id}" title="Remove">&times;</button>
+      </div>
+    `).join("");
+
+    // Wire up delete buttons on interactions
+    listEl.querySelectorAll(".int-delete").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const intId = e.currentTarget.dataset.intId;
+        if (!confirm("Delete this interaction?")) return;
+        try {
+          await fetch(`${API}/api/interactions/${intId}`, { method: "DELETE", credentials: "include" });
+          loadInteractions(contactId);
+        } catch (err) {
+          showAlert("edit-modal-alert", "error", friendlyError(err));
+        }
+      });
+    });
+  } catch (err) {
+    listEl.innerHTML = '<div class="interaction-empty">Could not load interactions.</div>';
+  }
+}
+
+function renderPendingInteractions() {
+  const listEl = $("#interaction-list");
+  if (pendingInteractions.length === 0) {
+    listEl.innerHTML = '<div class="interaction-empty">No recorded history!</div>';
+    return;
+  }
+  const sorted = [...pendingInteractions].sort((a, b) => b.date.localeCompare(a.date));
+  listEl.innerHTML = sorted.map((item, i) => `
+    <div class="interaction-item">
+      <span class="int-date">${escapeHtml(item.date)}</span>
+      <span class="int-note">${escapeHtml(item.note)}</span>
+      <button class="int-delete" data-pending-idx="${i}" title="Remove">&times;</button>
+    </div>
+  `).join("");
+
+  listEl.querySelectorAll(".int-delete").forEach(btn => {
+    btn.addEventListener("click", () => {
+      pendingInteractions.splice(parseInt(btn.dataset.pendingIdx), 1);
+      renderPendingInteractions();
+    });
+  });
+}
+
+function openEditModal(rowIndex) {
+  const contact = rowIndex != null ? allContacts[rowIndex] : null;
+  editMode = contact ? "edit" : "add";
+  editContactId = contact ? contact.id : null;
+  const dataKeys = getAllFieldKeys();
+
+  $("#edit-modal-title").textContent = contact ? contact.Name : "New Contact";
+  $("#edit-save").textContent = contact ? "Save Changes" : "Add Contact";
+  hideAlert("edit-modal-alert");
+
+  const container = $("#edit-fields");
+  const val = (k) => contact && contact[k] != null ? String(contact[k]) : "";
+
+  // ── Top section: Name, Category ──
+  let html = "";
+  html += buildFieldHTML("Name", val("Name"), { isName: true });
+  html += buildFieldHTML("Category", val("Category"), { isCat: true });
+
+  // ── Interaction log section ──
+  html += `<hr class="field-separator">`;
+  html += `<div class="interaction-section">
+    <h3>History</h3>
+    <div class="interaction-add">
+      <div class="date-col">
+        <label>Date</label>
+        <div class="date-picker-wrap" style="height:36px;padding:4px 8px;width:fit-content;">
+          <input type="date" id="int-date" value="${todayStr()}" style="min-width:auto;" />
+        </div>
+      </div>
+      <div class="note-col">
+        <label>What happened?</label>
+        <input type="text" id="int-note" placeholder="e.g. Grabbed coffee, got drinks" />
+      </div>
+      <button id="int-add-btn" class="btn-primary btn-sm" style="height:36px;">Add</button>
+    </div>
+    <div id="interaction-list" class="interaction-list"></div>
+  </div>`;
+
+  // ── Bottom section: all other data fields ──
+  html += `<hr class="field-separator">`;
+  html += dataKeys.map(key => buildFieldHTML(key, val(key))).join("");
+
+  container.innerHTML = html;
+
+  // Wire up interaction log
+  pendingInteractions = [];
+
+  $("#int-add-btn").addEventListener("click", async () => {
+    const date = $("#int-date").value;
+    const note = $("#int-note").value.trim();
+    if (!date || !note) return;
+
+    if (editMode === "edit") {
+      // Save immediately to the server
+      try {
+        const res = await fetch(`${API}/api/contacts/${editContactId}/interactions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ date, note }),
+        });
+        const result = await res.json();
+        if (result.error) { showAlert("edit-modal-alert", "error", result.error); return; }
+        $("#int-note").value = "";
+        loadInteractions(editContactId);
+      } catch (err) {
+        showAlert("edit-modal-alert", "error", friendlyError(err));
+      }
+    } else {
+      // Queue locally for add mode
+      pendingInteractions.push({ date, note });
+      $("#int-note").value = "";
+      renderPendingInteractions();
+    }
+  });
+
+  $("#int-note").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); $("#int-add-btn").click(); }
+  });
+
+  if (editMode === "edit") {
+    loadInteractions(editContactId);
+  } else {
+    renderPendingInteractions();
+  }
+
+  $("#edit-modal").classList.remove("hidden");
+}
+
+// Cancel edit
+$("#edit-cancel").addEventListener("click", () => {
+  $("#edit-modal").classList.add("hidden");
+  editContactId = null;
+});
+
+// Close on overlay click
+$("#edit-modal").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) {
+    $("#edit-modal").classList.add("hidden");
+    editContactId = null;
+  }
+});
+
+// Save (works for both edit and add modes)
+$("#edit-save").addEventListener("click", async () => {
+  if (editMode === "edit" && !editContactId) return;
+
+  // Collect all field values from the modal
+  const data = {};
+  $("#edit-fields").querySelectorAll("[data-field]").forEach(el => {
+    const key = el.dataset.field;
+    const val = el.value.trim();
+    if (val) data[key] = val;
+  });
+
+  if (!data.Name) {
+    showAlert("edit-modal-alert", "error", "Name is required.");
+    return;
+  }
+
+  const btn = $("#edit-save");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Saving…';
+
+  try {
+    let url, method;
+    if (editMode === "add") {
+      url = `${API}/api/contacts/add`;
+      method = "POST";
+    } else {
+      url = `${API}/api/contacts/${editContactId}`;
+      method = "PUT";
+    }
+
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+    if (result.error) {
+      showAlert("edit-modal-alert", "error", result.error);
+      return;
+    }
+
+    // In add mode, save any pending interactions to the new contact
+    if (editMode === "add" && pendingInteractions.length > 0 && result.contact_id) {
+      for (const item of pendingInteractions) {
+        await fetch(`${API}/api/contacts/${result.contact_id}/interactions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(item),
+        });
+      }
+      pendingInteractions = [];
+    }
+
+    /* success alert removed */
+    $("#edit-modal").classList.add("hidden");
+    editContactId = null;
+    loadContacts();
+  } catch (err) {
+    showAlert("edit-modal-alert", "error", friendlyError(err));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editMode === "add" ? "Add Contact" : "Save Changes";
+  }
+});
+
+// VCF upload (iOS/macOS Contacts export) — parse → preview → select → import
+let vcfParsedContacts = [];
+
+function updateVcfCount() {
+  const checked = document.querySelectorAll("#vcf-contact-list input:checked").length;
+  $("#vcf-selected-count").textContent = checked;
+}
+
+function renderVcfModal(contacts) {
+  vcfParsedContacts = contacts;
+  const list = $("#vcf-contact-list");
+  $("#vcf-total-count").textContent = contacts.length;
+
+  const dupeCount = contacts.filter(c => c._duplicate).length;
+  const newCount = contacts.length - dupeCount;
+
+  list.innerHTML = contacts.map((c, i) => {
+    const isDupe = c._duplicate;
+    const checked = !isDupe;  // new contacts checked, duplicates unchecked
+    // Show all fields except Name and internal flags
+    const detail = Object.entries(c)
+      .filter(([k]) => k !== "Name" && !k.startsWith("_"))
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(" · ");
+    const dupeTag = isDupe ? '<span class="dupe-tag">already in list</span>' : "";
+    return `
+      <label class="contact-row${checked ? " selected" : ""}${isDupe ? " is-duplicate" : ""}">
+        <input type="checkbox" data-idx="${i}" ${checked ? "checked" : ""} />
+        <div>
+          <div class="contact-name">${escapeHtml(c.Name)} ${dupeTag}</div>
+          ${detail ? `<div class="contact-detail">${escapeHtml(detail)}</div>` : ""}
+        </div>
+      </label>`;
+  }).join("");
+
+  // Toggle row highlight when checkbox changes
+  list.querySelectorAll("input[type=checkbox]").forEach(cb => {
+    cb.addEventListener("change", () => {
+      cb.closest(".contact-row").classList.toggle("selected", cb.checked);
+      updateVcfCount();
+    });
+  });
+
+  // Show a summary above the list
+  const subtitle = $(".modal-card .subtitle");
+  if (dupeCount > 0) {
+    subtitle.textContent = `${newCount} new contacts, ${dupeCount} already in your list (unchecked).`;
+  } else {
+    subtitle.textContent = "Choose which contacts you'd like to add to your list.";
+  }
+
+  updateVcfCount();
+  $("#vcf-modal").classList.remove("hidden");
+}
+
+$("#vcf-upload").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const fd = new FormData();
+  fd.append("file", file);
+  try {
+    const res = await fetch(`${API}/api/contacts/parse-vcf`, { method: "POST", credentials: "include", body: fd });
+    const data = await res.json();
+    if (data.error) { showAlert("contacts-alert", "error", data.error); return; }
+    renderVcfModal(data.contacts);
+  } catch (err) {
+    showAlert("contacts-alert", "error", "Import failed: " + friendlyError(err));
+  }
+  e.target.value = "";
+});
+
+// Select All / Deselect All
+$("#vcf-select-all").addEventListener("click", () => {
+  document.querySelectorAll("#vcf-contact-list input[type=checkbox]").forEach(cb => {
+    cb.checked = true;
+    cb.closest(".contact-row").classList.add("selected");
+  });
+  updateVcfCount();
+});
+$("#vcf-deselect-all").addEventListener("click", () => {
+  document.querySelectorAll("#vcf-contact-list input[type=checkbox]").forEach(cb => {
+    cb.checked = false;
+    cb.closest(".contact-row").classList.remove("selected");
+  });
+  updateVcfCount();
+});
+
+// Cancel
+$("#vcf-cancel").addEventListener("click", () => {
+  $("#vcf-modal").classList.add("hidden");
+});
+
+// Import Selected
+$("#vcf-import").addEventListener("click", async () => {
+  const checked = document.querySelectorAll("#vcf-contact-list input:checked");
+  const selected = Array.from(checked).map(cb => {
+    return { ...vcfParsedContacts[parseInt(cb.dataset.idx)] };
+  });
+
+  if (selected.length === 0) {
+    showAlert("contacts-alert", "warning", "No contacts selected");
+    return;
+  }
+
+  const btn = $("#vcf-import");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Importing…';
+
+  try {
+    const res = await fetch(`${API}/api/contacts/import-selected`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ contacts: selected }),
+    });
+    const data = await res.json();
+    if (data.error) { showAlert("contacts-alert", "error", data.error); return; }
+    /* success alert removed */
+    loadContacts();
+    $("#vcf-modal").classList.add("hidden");
+  } catch (err) {
+    showAlert("contacts-alert", "error", "Import failed: " + friendlyError(err));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Import Selected";
+  }
+});
+
+// Random contact
+$("#random-btn").addEventListener("click", async () => {
+  const cat = $("#category-filter").value;
+  try {
+    const res = await fetch(`${API}/api/contacts/random?category=${encodeURIComponent(cat)}`, { credentials: "include" });
+    const data = await res.json();
+    if (data.error) { $("#random-result").innerHTML = `<p style="color:var(--warning);margin-top:10px;">${escapeHtml(data.error)}</p>`; return; }
+    const c = data.contact;
+    const details = Object.entries(c)
+      .filter(([k]) => k !== "Name" && k !== "id")
+      .map(([k, v]) => `<span><strong>${escapeHtml(k)}:</strong> ${escapeHtml(v)}</span>`)
+      .join("");
+    let lastHistory = "";
+    try {
+      const hRes = await fetch(`${API}/api/contacts/${c.id}/interactions`, { credentials: "include" });
+      const hData = await hRes.json();
+      if (hData.interactions && hData.interactions.length > 0) {
+        const latest = hData.interactions[0];
+        lastHistory = `<div class="details" style="margin-top:6px;"><span><strong>Last interaction:</strong> ${escapeHtml(latest.date)} — ${escapeHtml(latest.note)}</span></div>`;
+      }
+    } catch (_) {}
+    $("#random-result").innerHTML = `
+      <div class="highlight-card">
+        <div class="name">📞 Call: ${escapeHtml(c.Name)}</div>
+        <div class="details">${details}</div>
+        ${lastHistory}
+      </div>`;
+  } catch (err) {
+    $("#random-result").innerHTML = `<p style="color:var(--danger);margin-top:10px;">${escapeHtml(friendlyError(err))}</p>`;
+  }
+});
+
+// ── TAB 2: Refresher ────────────────────────────────────────────
+
+// Keep the two lookback inputs in sync
+function updateDateFromDays() {
+  const days = parseInt($("#timeframe-days").value) || 7;
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  $("#timeframe-date").value = d.toISOString().slice(0, 10);
+}
+
+// Set the initial date on page load
+updateDateFromDays();
+
+$("#timeframe-days").addEventListener("input", updateDateFromDays);
+$("#timeframe-date").addEventListener("change", () => {
+  // When the user picks a date, update the days field to match
+  const picked = new Date($("#timeframe-date").value);
+  const now = new Date();
+  const diffDays = Math.max(1, Math.round((now - picked) / (1000 * 60 * 60 * 24)));
+  $("#timeframe-days").value = diffDays;
+});
+
+function getTimeframeDays() {
+  // If a specific date was picked, calculate days from that date
+  const dateVal = $("#timeframe-date").value;
+  if (dateVal) {
+    const picked = new Date(dateVal);
+    const now = new Date();
+    return Math.max(1, Math.round((now - picked) / (1000 * 60 * 60 * 24)));
+  }
+  // Otherwise use the number input
+  return parseInt($("#timeframe-days").value) || 7;
+}
+
+async function generateSummary(type) {
+  const btn = $(`#${type}-summary-btn`);
+  const alertId = `${type}-summary-alert`;
+  const resultEl = $(`#${type}-summary-result`);
+  const timeframe = String(getTimeframeDays());
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Generating…';
+  hideAlert(alertId);
+  resultEl.innerHTML = "";
+
+  try {
+    const res = await fetch(`${API}/api/summary/${type}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ timeframe }),
+    });
+    const data = await res.json();
+    if (data.error) { showAlert(alertId, "warning", data.error); return; }
+    resultEl.innerHTML = `<div class="summary-box">${escapeHtml(data.summary)}</div>`;
+  } catch (err) {
+    showAlert(alertId, "error", friendlyError(err));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = `Generate ${type === "life" ? "Life" : "Work"} Summary`;
+  }
+}
+
+$("#life-summary-btn").addEventListener("click", () => generateSummary("life"));
+$("#work-summary-btn").addEventListener("click", () => generateSummary("work"));
+
+// ── TAB 3 & 4: Journals ────────────────────────────────────────
+function setupJournal(type) {
+  const dateInput = $(`#${type}-date`);
+  dateInput.value = todayStr();
+
+  // Load a single entry for the selected date into the textareas
+  async function loadEntry(date) {
+    try {
+      const res = await fetch(`${API}/api/journal/${type}/${date}`, { credentials: "include" });
+      const data = await res.json();
+      if (data.entry) {
+        $(`#${type}-entry-1`).value = data.entry.entry1 || "";
+        $(`#${type}-entry-2`).value = data.entry.entry2 || "";
+        $(`#${type}-entry-3`).value = data.entry.entry3 || "";
+      } else {
+        // No entry for this date — clear the textareas
+        $(`#${type}-entry-1`).value = "";
+        $(`#${type}-entry-2`).value = "";
+        $(`#${type}-entry-3`).value = "";
+      }
+    } catch (err) {
+      // On error, just clear the fields
+      $(`#${type}-entry-1`).value = "";
+      $(`#${type}-entry-2`).value = "";
+      $(`#${type}-entry-3`).value = "";
+    }
+  }
+
+  // When the user picks a different date, load that date's entry + update badge
+  dateInput.addEventListener("change", () => {
+    loadEntry(dateInput.value);
+  });
+
+  async function loadHistory() {
+    try {
+      const res = await fetch(`${API}/api/journal/${type}`, { credentials: "include" });
+      const data = await res.json();
+      const entries = data.entries || [];
+      renderTable(`${type}-thead`, `${type}-tbody`, entries.reverse());
+      if (data.error) showAlert(`${type}-history-alert`, "warning", data.error);
+    } catch (err) {
+      showAlert(`${type}-history-alert`, "error", friendlyError(err));
+    }
+  }
+
+  $(`#${type}-save-btn`).addEventListener("click", async () => {
+    const btn = $(`#${type}-save-btn`);
+    const alertId = `${type}-save-alert`;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Saving…';
+
+    try {
+      const res = await fetch(`${API}/api/journal/${type}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          date: dateInput.value,
+          entry1: $(`#${type}-entry-1`).value,
+          entry2: $(`#${type}-entry-2`).value,
+          entry3: $(`#${type}-entry-3`).value,
+        }),
+      });
+      const data = await res.json();
+      if (data.error) { showAlert(alertId, "error", data.error); return; }
+      /* success alert removed */
+      // Text stays in the boxes so the user can keep editing
+      loadHistory();
+    } catch (err) {
+      showAlert(alertId, "error", "Save failed: " + friendlyError(err));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Save Entry";
+    }
+  });
+
+  loadHistory();
+  // Load today's existing entry (if any) into the textareas
+  loadEntry(todayStr());
+}
+
+// ── Init ────────────────────────────────────────────────────────
+(async function init() {
+  await checkAuth();
+})();
+</script>
+</body>
+</html>
